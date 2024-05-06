@@ -1,0 +1,167 @@
+html {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 130%;
+}
+
+/*------------------------------
+        CSS BOUTONS
+------------------------------*/
+
+.bouton {
+    border-style:solid;
+    border-radius: 15px;
+    padding: 10px 15px 10px 15px;
+    cursor: pointer;
+    background-color: white;
+    border-color: black;
+}
+
+.deconnexion {
+    grid-column: 3 / 3;
+    grid-row: 1 / 1;
+    margin: 10px;
+    line-height: 32px;
+    background-color: rgb(219, 233, 193);
+}
+
+.btn_ajout {
+    margin:none;
+}
+
+/*------------------------------
+         FORMAT : GRID
+------------------------------*/
+
+/* grid login */
+.grid1 {
+    display: grid;
+    grid-template-columns: 300px;
+    grid-auto-rows: minmax(10px, auto);
+    grid-gap: 10px;
+    justify-content: center;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: 150px;
+    grid-gap: 1px;
+}
+
+#mat {
+    grid-column: 2 / 2;
+}
+
+#pwd {
+    grid-column: 2 / 2;
+}
+
+.mat {
+    grid-column: 1 / 2;
+}
+
+.pwd {
+    grid-column: 1 / 2;
+}
+
+
+/* grid note de frais */
+.grid_note_frais {
+    display: grid;
+    grid-template-columns: 300px;
+    grid-auto-rows: minmax(10px, auto);
+    grid-gap: 10px;
+    justify-content: left;
+}
+
+/* grid btn ajout note frais */
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/*------------------------------
+         FORMAT : FLEX
+------------------------------*/
+
+
+
+/*------------------------------
+BARRE DE NAVIGATION : CSS HEADER
+------------------------------*/
+
+header {
+    display: grid;
+    position: absolute;
+    top: 0% ;
+    left: 0%;
+    width : 100%;
+    height: 80px;
+    margin: 0 auto;
+    background-color: rgb(141,197,63);
+    grid-template-columns: 4% 87%;
+}
+
+.logo {
+    grid-column: 1 / 3;
+    grid-row: 1 / 1;
+    border-radius: 30px;
+    height: 60px;
+    padding: 10px;
+    float: left;
+}
+
+.navBar {
+    grid-column: 2 / 3;
+    grid-row: 1 / 1;
+    text-align: left;
+    line-height:80px;
+    color: rgb(90, 90, 90);
+    font-weight: bold;
+}
+
+/*------------------------------
+        TITRE : CSS TITRE
+------------------------------*/
+
+.Logos {
+    height: 100px;
+    margin : 100px 100px 0px 100px;
+}
+
+.titre {
+    text-align:center;
+    margin : 0px 0px 0px 0px;
+}
+
+.sous-titre {
+    text-align:center;
+    margin : 0px 0px 0px 0px;
+}
+
+/*------------------------------
+     POST FORM : LOGIN CSS
+------------------------------*/
+h3 {
+    margin-left:46.5%;
+}
+
+.connexion {
+    margin-left: 30%;
+}
+
+/*------------------------------
+        ERREUR : CSS MARGE
+------------------------------*/
+
+.errorText {
+    text-align: center;
+    margin-left: 150px;
+}
+
+/*------------------------------
+      STYLE : NOTE DE FRAIS
+------------------------------*/
+
+.note_frais {
+    padding-right:-50%; 
+}
