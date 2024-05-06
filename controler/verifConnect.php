@@ -15,11 +15,11 @@ $requeteVerif->bindValue(':mat', $mat , PDO::PARAM_STR);
 $requeteVerif->bindValue(':mdp', $mdp , PDO::PARAM_STR);
 
 $requeteVerif->execute();
-$dataRequeteVerif = $requeteVerif->fetchALL(PDO::FETCH_ASSOC);
+$dataVerif = $requeteVerif->fetchALL(PDO::FETCH_ASSOC);
 
-if (count($dataRequeteVerif)) {
+if (count($dataVerif)) {
   // vérification données et redirection
-  foreach ($dataRequeteVerif as $row) 
+  foreach ($dataVerif as $row) 
   {
     // création d'une session
     session_start();

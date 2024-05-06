@@ -1,15 +1,13 @@
-<?php
+<?php // FINI TA GROSSE MERDE QUE TU FAIS LÀ (c'est quand tu modifie la note plutôt que de la créer)
 echo "<br />Ajouter Note ";
 
-// Création d'une note de frais dans la BDD
-$requeteCreationNoteFrais = $conn->prepare("INSERT INTO NOTE_FRAIS (DATE_FRAIS) VALUES (CURRENT_DATE);");
-$requeteCreationNoteFrais->execute();
+// Sélection de la note de frais ciblée  dans la BDD
+$requeteSelectionNoteFrais = $conn->prepare("SELECT IDNOTEFRAIS, DATE_FRAIS FROM NOTE_FRAIS WHERE IDNOTEFRAIS = /* l'id de la note de frais visée' */;");
+$requeteSelectionNoteFrais->execute();
 
-$requeteIdNote = $conn->prepare('SELECT IDNOTEFRAIS FROM NOTE_FRAIS;');
-$requeteIdNote->execute();
 $dataIdNote = $requeteIdNote->fetchALL(PDO::FETCH_ASSOC);
 $lastIdNote = count($dataIdNote)-1;
-$_SESSION['idNouvelleNote'] = $dataIdNote[$lastIdNote]['IDNOTEFRAIS'];
+$_SESSION['idNoteModif'] = $dataIdNote[$lastIdNote]['IDNOTEFRAIS'];
 
 // Vérification des données de la note de frais créée
 if (isset($_GET['ajoutNote']))
@@ -54,7 +52,7 @@ if (isset($_GET['ajoutNote']))
 </form>
 
 <div class='wrapper'>
-    <a class='bouton btn_ajout btn1' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=delete");'>Retour</a>
+    <a class='bouton btn_ajout btn1' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=cancel");'>Retour</a>
     <a class='bouton btn_ajout btn2' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=draft");'>Enregistrer en brouillon</a>
     <a class='bouton btn_ajout btn3' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=add");'>Valider</a>
 </div>

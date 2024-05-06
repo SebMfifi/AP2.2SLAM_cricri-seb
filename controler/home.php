@@ -6,7 +6,7 @@ $requeteAffi = $conn->prepare("SELECT NOMSALARIE, PRENOMSALARIE, MATRICULE, RESP
 $requeteAffi->bindValue(':mat', $_SESSION['matricule'] , PDO::PARAM_STR);
 
 $requeteAffi->execute();
-$dataRequeteAffi = $requeteAffi->fetchALL(PDO::FETCH_ASSOC);
+$dataAffi = $requeteAffi->fetchALL(PDO::FETCH_ASSOC);
 
 
 $requeteCount = $conn->prepare("SELECT COUNT(*) AS TOTAL FROM REALISER WHERE IDSTATUTS = 2");
@@ -14,12 +14,12 @@ $requeteCount = $conn->prepare("SELECT COUNT(*) AS TOTAL FROM REALISER WHERE IDS
 $requeteCount->execute();
 $dataCount = $requeteCount->fetch();
 
-foreach ($dataRequeteAffi as $row) 
+foreach ($dataAffi as $row) 
 {
     $salarie = $_SESSION['matricule']." ".$row['NOMSALARIE']." ".$row['PRENOMSALARIE'];
-    if (isset($dataRequeteAffi['RESPONSABLE']))
+    if (isset($dataAffi['RESPONSABLE']))
     {
-        $responsable = $dataRequeteAffi['RESPONSABLE'];
+        $responsable = $dataAffi['RESPONSABLE'];
     }
 }
 
@@ -29,18 +29,37 @@ if (isset($_GET['actionNote']))
 {
     if (in_array($_GET['actionNote'], $noteFraisActionList)) 
     {
-        switch ($_GET['actionNote']) 
+        switch ($_GET['actionNote'])  // AJOUTER DANS CHAQUE CASE SI LA NOTE EST NOUVELLE OU MODIFIÉE
         {
+            case "cancel":
+                echo "annulation";
+                break;
             case "delete":
-                $requeteSupprNote = $conn->prepare("DELETE FROM NOTE_FRAIS WHERE IDNOTEFRAIS = :id_note;");
-                $requeteSupprNote->bindValue(':id_note', $_SESSION['idNouvelleNote'] , PDO::PARAM_STR); // l'id est pas conservée dans la session ?
-                echo $_SESSION['idNouvelleNote'];
+                $requeteSupprNote = $conn->prepare("DELETE FROM NOTE_FRAIS WHERE IDNOTEFRAIS = :id_note;"); // la ligne est pas supprimée pour 0 raison envie de caner.
+                $requeteSupprNote->bindValue(':id_note', $_SESSION['idNouvelleNote'] , PDO::PARAM_STR);
+                $requeteSupprNote->execute();
                 break;
             case "draft":
-                echo "note de frais en brouillon";
+                try // vérifie si la note de frais n'existe pas déjà (empêche les erreurs via un rafraichissement de la page)
+                {
+                    $requeteBrouillonNote = $conn->prepare("INSERT INTO REALISER (MATRICULE, IDNOTEFRAIS, IDSTATUTS ,DATEEDITNOTE) VALUES (:mat, :id_note, 4, CURRENT_DATE);");
+                    $requeteBrouillonNote->bindValue(':mat', $_SESSION['matricule'] , PDO::PARAM_STR);
+                    $requeteBrouillonNote->bindValue(':id_note', $_SESSION['idNouvelleNote'] , PDO::PARAM_STR);
+                    $requeteBrouillonNote->execute();
+                } catch(PDOException $err) {
+                    echo "";
+                }
                 break;
             case "add":
-                echo "ajout de la note de frais réussie";
+                try
+                    {
+                    $requeteAjoutNote = $conn->prepare("INSERT INTO REALISER (MATRICULE, IDNOTEFRAIS, IDSTATUS, DATEEDITNOTE) VALUES (:mat, :id_note, 2, CURRENT_DATE);");
+                    $requeteAjoutNote->bindValue(':mat', $_SESSION['matricule'] , PDO::PARAM_STR);
+                    $requeteAjoutNote->bindValue(':id_note', $_SESSION['idNouvelleNote'] , PDO::PARAM_STR);
+                    $requeteAjoutNote->execute();
+                } catch(PDOException $err) {
+                    echo "";
+                }
                 break;
         }
     }
