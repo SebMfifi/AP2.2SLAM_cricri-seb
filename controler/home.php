@@ -17,6 +17,9 @@ foreach ($dataAffi as $row)
     }
 }
 
+$titre = 'Bienvenue '.$salarie;
+require "view/titre.php";
+
 // vérification de première connexion et changement de la valeur de connexion
 if (isset($_GET['firstConnect']))
 {
@@ -52,8 +55,6 @@ $requeteNoteFrais->bindValue(':mat', $_SESSION['matricule'], PDO::PARAM_STR);
 $requeteNoteFrais->execute();
 $dataNoteFrais = $requeteNoteFrais->fetchALL(PDO::FETCH_ASSOC);
 
-$titre = 'Bienvenue '.$salarie;
-require "view/titre.php";
 if ($_GET['complement'] == 'noteFrais')
 {
     echo '<a class="bouton btn_ajout" onClick="location.replace(\'main.php?page=home&complement=ajouterNote\');">Ajouter</a>'; // classe css avec un flex ou une grid pour bien mettre le bouton

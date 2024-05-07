@@ -60,7 +60,7 @@ echo "<div class='affi_notes_frais scrollable'><ul style='list-style-type:none;'
 foreach ($dataNoteFrais as $row)
 {
     $etat = $listeEtat[$row['NUMSTATUS']];
-    echo "<li class='note_frais'>Note de frais du ".$row['DATEEDITNOTE']." - État : ".$etat." &emsp;<i style='color:RGB(33, 84, 154);'><a class='modif_note' onClick=\"location.replace('main.php?page=home&complement=copierNote');\">Copier</a> ";
+    echo "<li class='note_frais'>Note de frais du ".$row['DATEEDITNOTE']." - État : ".$etat." &emsp;<i style='color:RGB(33, 84, 154);'><a class='modif_note' onClick=\"location.replace('main.php?page=home&complement=copierNote&noteCopie=".$row['IDNOTEFRAIS']."');\">Copier</a> ";
     if ($row['NUMSTATUS'] == 4)
     {
         echo "&emsp;<a class='modif_note' onClick=\"location.replace('main.php?page=home&complement=modifierNote');\">Éditer</a>";
