@@ -2,12 +2,19 @@
 echo "<br />Ajouter Note ";
 
 // Sélection de la note de frais ciblée  dans la BDD
-$requeteSelectionNoteFrais = $conn->prepare("SELECT IDNOTEFRAIS, DATE_FRAIS FROM NOTE_FRAIS WHERE IDNOTEFRAIS = /* l'id de la note de frais visée' */;");
-$requeteSelectionNoteFrais->execute();
+if (!isset($_SESSION['idModifNote']))
+{
+    $requeteSelectionNoteFrais = $conn->prepare("SELECT IDNOTEFRAIS, DATE_FRAIS FROM NOTE_FRAIS WHERE IDNOTEFRAIS = /* l'id de la note de frais visée' */;");
+    $requeteSelectionNoteFrais->execute();
 
-$dataIdNote = $requeteIdNote->fetchALL(PDO::FETCH_ASSOC);
-$lastIdNote = count($dataIdNote)-1;
-$_SESSION['idNoteModif'] = $dataIdNote[$lastIdNote]['IDNOTEFRAIS'];
+    $dataIdNote = $requeteIdNote->fetchALL(PDO::FETCH_ASSOC);
+    $lastIdNote = count($dataIdNote)-1;
+    $_SESSION['idModifNote'] = $dataIdNote[$lastIdNote]['IDNOTEFRAIS'];
+}
+
+/*
+AU DESSUS : MODIFIÉ PAR RAPPORT À NOTEFRAIS, FAIRE EN DESSOUS
+*/
 
 // Vérification des données de la note de frais créée
 if (isset($_GET['ajoutNote']))
@@ -20,19 +27,30 @@ if (isset($_GET['ajoutNote']))
             $qteFrais = htmlspecialchars($_POST['qteFrais']);
             $dateFrais = htmlspecialchars($_POST['dateFrais']);
 
-            $requetePrix = $conn->prepare("SELECT CODEFRAIS, PRIXFRAIS FROM FRAIS;");
+            $requetePrix = $conn->prepare("SELECT CODEFRAIS, PRIXFRAIS FROM FRAIS WHERE CODEFRAIS = :codeFrais;");
+            $requetePrix->bindValue(':codeFrais', $typeFrais , PDO::PARAM_STR);
+            $requetePrix->execute();
+
             $dataPrix = $requetePrix->fetchALL(PDO::FETCH_ASSOC);
+            foreach ($dataPrix as $row) { $prixFrais = $row['PRIXFRAIS'];}
 
-            $requeteAjoutFrais = $conn->prepare("INSERT INTO AJOUTER (CODEFRAIS, QUANTITE, PRIXHISTORIQUE, DATEFRAIS) VALUES (:codeFrais, :quantite, :prix, :dateFrais);");
-            $requeteAjoutFrais->bindValue(':codeFrais', $typeFrais , PDO::PARAM_STR);
-            $requeteAjoutFrais->bindValue(':quantite', $qteFrais , PDO::PARAM_STR);
-            $requeteAjoutFrais->bindValue(':dateFrais', $dateFrais , PDO::PARAM_STR);
-            $requeteAjoutFrais->bindValue(':prix', ($dataPrix['PRIXFRAIS'][$typeFrais-1]*$qteFrais) , PDO::PARAM_STR);
+            try 
+            {
+                $requeteAjoutFrais = $conn->prepare("INSERT INTO AJOUTER (IDNOTEFRAIS, CODEFRAIS, QUANTITE, PRIXHISTORIQUE, DATEFRAIS) VALUES (".$_SESSION['idNouvelleNote'].", :codeFrais, :quantite, :prix, :dateFrais);");
+                $requeteAjoutFrais->bindValue(':codeFrais', $typeFrais , PDO::PARAM_STR);
+                $requeteAjoutFrais->bindValue(':quantite', $qteFrais , PDO::PARAM_STR);
+                $requeteAjoutFrais->bindValue(':dateFrais', $dateFrais , PDO::PARAM_STR);
+                $requeteAjoutFrais->bindValue(':prix', ($prixFrais*$qteFrais) , PDO::PARAM_STR);
+                $requeteAjoutFrais->execute();
+            } catch(PDOException $err) {
+                    echo "";
+            }
 
-            $requeteAjoutFrais->execute();
         } else {
             header("Location: main.php?page=home&complement=ajouterNote&errors=donnee");
         }
+    } else {
+        header("Location: main.php?page=home&complement=ajouterNote&errors=donnee");
     }
 }
 ?>
@@ -51,15 +69,30 @@ if (isset($_GET['ajoutNote']))
     <input type='submit' class='bouton connexion' value='Ajouter frais'/> 
 </form>
 
+<?php // affichage des frais de la note || FORMAT = typeFrais : prixFrais - dateFrais
+if (isset($dataAjoutFrais))
+{
+    $requeteAffiFrais = $conn->prepare("SELECT IDNOTEFRAIS, TYPEFRAIS, QUANTITE, PRIXHISTORIQUE, DATEFRAIS FROM AJOUTER a INNER JOIN FRAIS f ON a.CODEFRAIS = f.CODEFRAIS WHERE IDNOTEFRAIS = :idNoteFrais");
+    $requeteAffiFrais->bindValue(":idNoteFrais", $_SESSION['idNouvelleNote'], PDO::PARAM_STR);
+    $requeteAffiFrais->execute();
+
+    $dataAffiFrais = $requeteAffiFrais->fetchALL(PDO::FETCH_ASSOC);
+    echo "<div><ul style='list-style-type:none;'>";
+    foreach ($dataAffiFrais as $row)
+    {// L'affichage ne se fait pas, va savoir pourquoi
+        echo "<li class='note_frais'>".$row['TYPEFRAIS']." : ".$row['PRIXHISTORIQUE']."€ - ".$row['DATEFRAIS']."</li>";
+    }
+    echo "</ul>";
+}
+?>
+
 <div class='wrapper'>
-    <a class='bouton btn_ajout btn1' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=cancel");'>Retour</a>
+    <a class='bouton btn_ajout btn1' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=delete");'>Retour</a>
     <a class='bouton btn_ajout btn2' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=draft");'>Enregistrer en brouillon</a>
     <a class='bouton btn_ajout btn3' onClick='location.replace("main.php?page=home&complement=noteFrais&actionNote=add");'>Valider</a>
 </div>
 
 <!-- À FAIRE : 
-+ Les frais ajoutés doivent être affichés et mis dans la BDD 
-+ On doit pouvoir annuler toute modification
-+ on doit pouvoir valider une note de frais 
++ Les frais ajoutés doivent être affichés
 
 --> 
