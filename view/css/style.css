@@ -83,6 +83,18 @@ html {
     grid-template-columns: repeat(3, 1fr);
 }
 
+.btn1 {
+    grid-column: 1 / 5,
+}
+
+.btn2 {
+    grid-column: 3 / 5,
+}
+
+.btn3 {
+    grid-column: 5 / 5,
+}
+
 /*------------------------------
          FORMAT : FLEX
 ------------------------------*/

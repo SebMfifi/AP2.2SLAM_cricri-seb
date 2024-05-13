@@ -34,10 +34,9 @@ if (isset($_GET['firstConnect']))
         {
             header("Location: main.php?page=confirm&errors=samePwd");
         } else {
-            $requeteFirstConn = $conn->prepare("UPDATE LOGINS SET firstConnexion=1 AND MDPSALARIE=:nouvMdp WHERE MATRICULE=:mat");
+            $requeteFirstConn = $conn->prepare("UPDATE LOGINS SET firstConnexion=1 AND MDPSALARIE=:nouvMdp WHERE MATRICULE=:mat;");
             $requeteFirstConn->bindValue(':mat', $_SESSION['matricule'] , PDO::PARAM_STR);
-            $requeteFirstConn->bindValue(':mdp', $_SESSION['mdp'] , PDO::PARAM_STR);
-            $requeteFirstConn->bindValue(':nouvMdp', $_POST['confirmPwd'] , PDO::PARAM_STR);
+            $requeteFirstConn->bindValue(':nouvMdp', $_POST['pwd'] , PDO::PARAM_STR);
             $requeteFirstConn->execute();
         }
     }

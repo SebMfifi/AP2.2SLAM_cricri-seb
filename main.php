@@ -6,7 +6,7 @@ require 'models/connectToBDD.php';
  
 // mise en place d'une liste blanche
 $whitelist = array('verifConnect', 'home', 'confirm');
-$complementaryWl = array('ajouterNote', 'noteFrais', 'lireNote');
+$complementaryWl = array('ajouterNote', 'noteFrais', 'modifierNote', 'copierNote');
 $errorList = array('saisie', 'samePwd', 'donnee');
 
 // initialisation des valeurs de la session
