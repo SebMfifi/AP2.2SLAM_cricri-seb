@@ -67,10 +67,9 @@ html {
 /* grid note de frais */
 .grid_note_frais {
     display: grid;
-    grid-template-columns: 300px;
+    grid-template-columns: 100%;
     grid-auto-rows: minmax(10px, auto);
     grid-gap: 10px;
-    justify-content: left;
 }
 
 /* grid btn ajout note frais */
@@ -163,5 +162,5 @@ h3 {
 ------------------------------*/
 
 .note_frais {
-    padding-right:-50%; 
+    padding-right:0px; 
 }

@@ -26,9 +26,14 @@ echo "<div class='grid_home'>"; // div pour mise en page
 // vérification de la page selectionnée en GET et affichage
 if (isset($_GET['page']) && in_array($_GET['page'], $whitelist)) 
 {
-  include("controler/".$_GET['page'].'.php');
+    if ($_GET['page'] == "home")
+    {
+        include('controler/home.php');
+    } else {
+        include("controler/connect/".$_GET['page'].'.php');
+    }
 } else {
-  include('controler/connexion.php');
+  include('controler/connect/connexion.php');
 }
 
 // vérification de la présence d'une page complémentaire et affichage SI dans la page home
@@ -38,9 +43,9 @@ if (isset($_GET['page']))
   {
     if ((isset($_GET['complement']) && in_array($_GET['complement'], $complementaryWl)))
     {
-      include("controler/".$_GET['complement'].'.php');
+      include("controler/note/".$_GET['complement'].'.php');
     } else {
-      include('controler/noteFrais.php');
+      include('controler/note/noteFrais.php');
     }
   }
 }

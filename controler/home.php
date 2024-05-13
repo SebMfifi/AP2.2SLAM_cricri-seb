@@ -53,7 +53,7 @@ if (isset($_GET['actionNote']))
             case "add":
                 try
                     {
-                    $requeteAjoutNote = $conn->prepare("INSERT INTO REALISER (MATRICULE, IDNOTEFRAIS, IDSTATUS, DATEEDITNOTE) VALUES (:mat, :id_note, 2, CURRENT_DATE);");
+                    $requeteAjoutNote = $conn->prepare("INSERT INTO REALISER (MATRICULE, IDNOTEFRAIS, IDSTATUTS ,DATEEDITNOTE) VALUES (:mat, :id_note, 2, CURRENT_DATE);");
                     $requeteAjoutNote->bindValue(':mat', $_SESSION['matricule'] , PDO::PARAM_STR);
                     $requeteAjoutNote->bindValue(':id_note', $_SESSION['idNouvelleNote'] , PDO::PARAM_STR);
                     $requeteAjoutNote->execute();
