@@ -28,6 +28,10 @@ html {
     margin:none;
 }
 
+.modif_note {
+    cursor: pointer;
+}
+
 /*------------------------------
          FORMAT : GRID
 ------------------------------*/
@@ -64,13 +68,14 @@ html {
 }
 
 
-/* grid note de frais */
+/* grid note de frais *//*
 .grid_note_frais {
     display: grid;
     grid-template-columns: 100%;
     grid-auto-rows: minmax(10px, auto);
     grid-gap: 10px;
-}
+    justify-content: left;
+}*/
 
 /* grid btn ajout note frais */
 .wrapper {
@@ -162,5 +167,17 @@ h3 {
 ------------------------------*/
 
 .note_frais {
-    padding-right:0px; 
+    margin: -0.75% 0% 0.75% -1.5%;
+}
+
+.affi_notes_frais {
+    margin: 1.5% 0.5% 0% 0.5%;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 10px;
+}
+
+.scrollable {
+    height: 250px;
+    overflow-y: auto;
 }
